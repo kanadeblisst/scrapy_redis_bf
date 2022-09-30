@@ -18,9 +18,9 @@
 在scrapy项目里的 `settings.py`添加如下设置:
 
 ```python
-SCHEDULER = "scrapy_redis_bloomfilter.scheduler.Scheduler"
+SCHEDULER = "scrapy_redis_bf.scheduler.Scheduler"
 
-DUPEFILTER_CLASS = "scrapy_redis_bloomfilter.dupefilter.RFPDupeFilter"
+DUPEFILTER_CLASS = "scrapy_redis_bf.dupefilter.RFPDupeFilter"
 
 # 格式：redis://[:password@]host[:port][/database][?[timeout=timeout[d|h|m|s|ms|us|ns]][&database=database]]
 REDIS_URL = 'redis://localhost:6379'
