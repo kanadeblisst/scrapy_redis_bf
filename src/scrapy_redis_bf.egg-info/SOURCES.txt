@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+src/scrapy_redis_bf/__init__.py
+src/scrapy_redis_bf/defaults.py
+src/scrapy_redis_bf/dupefilter.py
+src/scrapy_redis_bf/exception.py
+src/scrapy_redis_bf/scheduler.py
+src/scrapy_redis_bf.egg-info/PKG-INFO
+src/scrapy_redis_bf.egg-info/SOURCES.txt
+src/scrapy_redis_bf.egg-info/dependency_links.txt
+src/scrapy_redis_bf.egg-info/requires.txt
+src/scrapy_redis_bf.egg-info/top_level.txt

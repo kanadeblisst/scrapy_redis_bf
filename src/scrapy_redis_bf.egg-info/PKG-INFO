@@ -1,0 +1,74 @@
+Metadata-Version: 2.1
+Name: scrapy-redis-bf
+Version: 0.0.5
+Summary: scrapy_redis use bloomfilter
+Author-email: kanade <kanade@blisst.cn>
+License: Copyright (c) 2018 The Python Packaging Authority
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/kanadeblisst/scrapy_redis_bf
+Project-URL: Bug Tracker, https://github.com/kanadeblisst/scrapy_redis_bf/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Scrapy-Redis-BloomFilter
+
+这是个scrapy_redis的布隆过滤器版本，与`https://github.com/Python3WebSpider/ScrapyRedisBloomFilter` 
+不同的是，该项目使用redis里的布隆过滤器，而不是使用bit来实现
+
+## 必要条件
+
+需要redis加载了布隆过滤器的插件，默认安装的redis是没有加载的
+具体请看：https://redis.io/docs/stack/bloom/quick_start/
+
+
+## 安装
+
+使用pip: `pip install scrapy-redis-bf`
+
+## 使用
+
+在scrapy项目里的 `settings.py`添加如下设置:
+
+```python
+SCHEDULER = "scrapy_redis_bloomfilter.scheduler.Scheduler"
+
+DUPEFILTER_CLASS = "scrapy_redis_bloomfilter.dupefilter.RFPDupeFilter"
+
+# 格式：redis://[:password@]host[:port][/database][?[timeout=timeout[d|h|m|s|ms|us|ns]][&database=database]]
+REDIS_URL = 'redis://localhost:6379'
+# 错误率
+BLOOMFILTER_ERRORRATE = 0.001
+# 去重量
+BLOOMFILTER_CAPACITY = 10000
+
+```
+
+## 测试
+
+下载该项目，然后运行里面的test spider即可
+
+## Github
+
+https://github.com/kanadeblisst/scrapy_redis_bf
+
