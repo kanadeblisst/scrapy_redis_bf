@@ -118,4 +118,4 @@ class RFPDupeFilter(BaseDupeFilter):
                    " (see DUPEFILTER_DEBUG to show all duplicates)")
             self.logger.debug(msg, {'request': request}, extra={'spider': spider})
             self.logdupes = False
-		spider.crawler.stats.inc_value('bloomfilter/filtered', spider=spider)
+        spider.crawler.stats.inc_value('bloomfilter/filtered', spider=spider)
