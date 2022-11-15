@@ -21,6 +21,8 @@
 SCHEDULER = "scrapy_redis_bf.scheduler.Scheduler"
 
 DUPEFILTER_CLASS = "scrapy_redis_bf.dupefilter.RFPDupeFilter"
+# 默认是通过spider的name来创建redis key
+SCHEDULER_DUPEFILTER_ATTR = "name"
 
 # 格式：redis://[:password@]host[:port][/database][?[timeout=timeout[d|h|m|s|ms|us|ns]][&database=database]]
 REDIS_URL = 'redis://localhost:6379'
@@ -28,6 +30,7 @@ REDIS_URL = 'redis://localhost:6379'
 BLOOMFILTER_ERRORRATE = 0.001
 # 去重量
 BLOOMFILTER_CAPACITY = 10000
+
 
 ```
 

@@ -16,13 +16,13 @@ logger = logging.getLogger(__name__)
 class RFPDupeFilter(BaseDupeFilter):
     logger = logger
 
-    def __init__(self, 
-        server: StrictRedis, 
-        key: str, 
-        errorRate: float, 
-        capacity: int, 
-        debug: bool=False
-    ):
+    def __init__(self,
+                 server: StrictRedis,
+                 key: str,
+                 errorRate: float,
+                 capacity: int,
+                 debug: bool = False
+                 ):
         """
         server: redis.Redis
         key: redis key
@@ -59,15 +59,17 @@ class RFPDupeFilter(BaseDupeFilter):
             raise NotConfigured
         server = StrictRedis.from_url(redis_url, decode_responses=True)
         key = defaults.DUPEFILTER_KEY % {'timestamp': int(time.time())}
-        errorRate = settings.get('BLOOMFILTER_ERRORRATE', defaults.BLOOMFILTER_ERRORRATE)
-        capacity = settings.getint('BLOOMFILTER_CAPACITY', defaults.BLOOMFILTER_CAPACITY)
+        errorRate = settings.get(
+            'BLOOMFILTER_ERRORRATE', defaults.BLOOMFILTER_ERRORRATE)
+        capacity = settings.getint(
+            'BLOOMFILTER_CAPACITY', defaults.BLOOMFILTER_CAPACITY)
         debug = settings.getbool('DUPEFILTER_DEBUG')
         return cls(server, key=key, errorRate=errorRate, capacity=capacity, debug=debug)
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls.from_settings(crawler.settings)
-    
+
     @classmethod
     def from_spider(cls, spider):
         settings = spider.settings
@@ -76,9 +78,19 @@ class RFPDupeFilter(BaseDupeFilter):
             logger.error("未配置REDIS_URL！")
             raise NotConfigured
         server = StrictRedis.from_url(redis_url, decode_responses=True)
-        key = defaults.SCHEDULER_DUPEFILTER_KEY % {'spider': spider.name}
-        errorRate = settings.get('BLOOMFILTER_ERRORRATE', defaults.BLOOMFILTER_ERRORRATE)
-        capacity = settings.getint('BLOOMFILTER_CAPACITY', defaults.BLOOMFILTER_CAPACITY)
+        dupefilter_key = settings.get(
+            'SCHEDULER_DUPEFILTER_KEY', defaults.SCHEDULER_DUPEFILTER_KEY)
+        dupefilter_attr = settings.get(
+            'SCHEDULER_DUPEFILTER_ATTR', defaults.SCHEDULER_DUPEFILTER_ATTR)
+        value = getattr(spider, dupefilter_attr, None)
+        if not value:
+            logger.error("配置的SCHEDULER_DUPEFILTER_ATTR错误，无法获取spider的属性!")
+            raise NotConfigured
+        key = dupefilter_key % {'spider': value}
+        errorRate = settings.get(
+            'BLOOMFILTER_ERRORRATE', defaults.BLOOMFILTER_ERRORRATE)
+        capacity = settings.getint(
+            'BLOOMFILTER_CAPACITY', defaults.BLOOMFILTER_CAPACITY)
         debug = settings.getbool('DUPEFILTER_DEBUG')
         return cls(server, key=key, errorRate=errorRate, capacity=capacity, debug=debug)
 
@@ -111,11 +123,13 @@ class RFPDupeFilter(BaseDupeFilter):
         """
         if self.debug:
             msg = "Filtered duplicate request: %(request)s"
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
+            self.logger.debug(msg, {'request': request},
+                              extra={'spider': spider})
         elif self.logdupes:
             msg = ("Filtered duplicate request %(request)s"
                    " - no more duplicates will be shown"
                    " (see DUPEFILTER_DEBUG to show all duplicates)")
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
+            self.logger.debug(msg, {'request': request},
+                              extra={'spider': spider})
             self.logdupes = False
         spider.crawler.stats.inc_value('bloomfilter/filtered', spider=spider)
