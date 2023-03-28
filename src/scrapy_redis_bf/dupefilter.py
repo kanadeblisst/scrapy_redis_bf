@@ -4,7 +4,10 @@ import time
 from redis import StrictRedis
 from scrapy.dupefilters import BaseDupeFilter
 from scrapy.exceptions import NotConfigured
-from scrapy.utils.request import request_fingerprint
+try:
+    from scrapy.utils.request import fingerprint as request_fingerprint
+except ImportError:
+    from scrapy.utils.request import request_fingerprint
 from .exception import RedisNoBloomException
 
 from . import defaults
